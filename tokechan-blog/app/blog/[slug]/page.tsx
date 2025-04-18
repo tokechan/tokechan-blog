@@ -1,5 +1,9 @@
 import { getPostBySlug } from "@/lib/notion";
 import { notFound } from "next/navigation";
+import { marked } from "marked";
+import 'highlight.js/styles/github.css';
+
+
 
 type Params = {
     params: {
@@ -11,6 +15,8 @@ export default async function BlogPostPage({ params }: Params) {
     const post = await getPostBySlug(params.slug)
 
     if (!post) return notFound()
+
+        const html = marked(post.content?.markdown || post.content?.parent || "");
 
         return (
             <main style={{ padding: "2rem" }}>
@@ -36,7 +42,7 @@ export default async function BlogPostPage({ params }: Params) {
 
                 <hr style={{ margin: "2rem 0" }} />
 
-                <div>
+                {/* <div>
                     {post.contentBlocks.map((block: any) =>{
                         if (block.type === "paragraph") {
                             return (
@@ -47,7 +53,8 @@ export default async function BlogPostPage({ params }: Params) {
                     }
                     return null
                     })}
-                </div>
+                </div> */}
+                <div dangerouslySetInnerHTML={{ __html: html }} />
             </main>
         )
 }

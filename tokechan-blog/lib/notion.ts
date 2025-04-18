@@ -1,8 +1,9 @@
 import { Client } from "@notionhq/client";
+import { NotionToMarkdown } from "notion-to-md";
 
-const notion = new Client({
-  auth: process.env.NOTION_TOKEN,
-});
+const notion = new Client({ auth: process.env.NOTION_TOKEN });
+const n2m = new NotionToMarkdown({ notionClient: notion});
+
 
 export async function getPosts() {
     const response = await notion.databases.query({
@@ -36,6 +37,7 @@ export async function getPosts() {
     })
 }
 
+
 export async function getPostBySlug(slug: string) {
         const response = await notion.databases.query({
             database_id: process.env.NOTION_DATABASE_ID!,
@@ -50,9 +52,13 @@ export async function getPostBySlug(slug: string) {
         const page = response.results[0]
         if (!page) return null
 
-        const blocks = await notion.blocks.children.list({
-            block_id: page.id!,
-        })
+        const mdBlocks = await n2m.pageToMarkdown(page.id)
+        const markdown = await n2m.toMarkdownString(mdBlocks)
+
+        console.log("✅ page.id:", page.id)
+        console.log("🐛 mdblocks", mdBlocks)
+        console.log("💡 markdown", markdown)
+
 
         const properties = page.properties
 
@@ -64,6 +70,6 @@ export async function getPostBySlug(slug: string) {
             tags: properties.Tags?.multi_select?.map((tag: any) => tag.name) || [],
             publishedDate: properties['Publish Data']?.date?.start || null,
             status: properties.Status?.select?.name || null,
-            contentBlocks: blocks.results,
+            content: markdown.markdown,
         }
 }                       
