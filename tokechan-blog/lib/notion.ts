@@ -1,4 +1,5 @@
 import { Client } from "@notionhq/client";
+import { marked } from "marked";
 import { NotionToMarkdown } from "notion-to-md";
 
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
@@ -12,7 +13,7 @@ export async function getPosts() {
             property: "Published",
             checkbox: {
                 equals: true,
-            }
+            },
         },
         sorts: [
             {
@@ -21,6 +22,8 @@ export async function getPosts() {
             },
         ],
     })
+    console.log("🟣 Notionから取得したposts", response.results);
+
 
     return response.results.map((page: any) => {
         const properties =page.properties
@@ -30,9 +33,8 @@ export async function getPosts() {
             title: properties.Title?.title?.[0]?.plain_text || 'No Title',
             slug: properties.Slug?.rich_text?.[0]?.plain_text || '',
             category: properties.Category?.select?.name || null,
-            tags: properties.Tags?.multi_select?.map((tag: any) => tag.name) || [],
+            tags: properties.Tags?.multi_select?.map((tag: any) => tag.name) ?? [],
             publishedDate: properties['Publish Data']?.date?.start || null,
-            status: properties.Status?.select?.name || null,
             }
     })
 }
@@ -51,15 +53,17 @@ export async function getPostBySlug(slug: string) {
 
         const page = response.results[0]
         if (!page) return null
+       
+        const mdBlocks = await n2m.pageToMarkdown(page.id);
+        const markdownObj = await n2m.toMarkdownString(mdBlocks);
+       
+        console.log("🧱 mdBlocks", mdBlocks);
+        console.log("📝 markdown result", markdownObj);
 
-        const mdBlocks = await n2m.pageToMarkdown(page.id)
-        const markdown = await n2m.toMarkdownString(mdBlocks)
-
-        console.log("✅ page.id:", page.id)
-        console.log("🐛 mdblocks", mdBlocks)
-        console.log("💡 markdown", markdown)
-
-
+        const html = marked(markdownObj.parent);
+        
+        
+    
         const properties = page.properties
 
         return {
@@ -70,6 +74,31 @@ export async function getPostBySlug(slug: string) {
             tags: properties.Tags?.multi_select?.map((tag: any) => tag.name) || [],
             publishedDate: properties['Publish Data']?.date?.start || null,
             status: properties.Status?.select?.name || null,
-            content: markdown.markdown,
+            content: html,
         }
-}                       
+}             
+
+export async function getPostAllPosts() {
+    const response = await notion.databases.query({
+        database_id: process.env.NOTION_DATABASE_ID!,
+        sorts: [
+            {
+                property: 'PublishedDate',
+                direction: 'descending',
+            },
+        ],
+    });
+
+    return response.results.map((pages) => {
+        const properties = pages.properties;
+
+        return {
+            id: pages.id,
+            title: properties.Title?.title?.[0]?.plain_text ?? 'No Title',
+            slug: properties.Slug.rich_text?.[0]?.plain_text ?? '',
+            publishedDate: properties.PublishedData?.date?.start ?? '',
+            category: properties.Category?.select?.name ?? '',
+            tags: properties.Tags?.multi_select?.map((tag) => tag.name) ?? [],
+        };
+    });
+}
