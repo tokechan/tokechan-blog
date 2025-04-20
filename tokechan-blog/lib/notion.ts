@@ -57,9 +57,6 @@ export async function getPostBySlug(slug: string) {
         const mdBlocks = await n2m.pageToMarkdown(page.id);
         const markdownObj = await n2m.toMarkdownString(mdBlocks);
        
-        console.log("🧱 mdBlocks", mdBlocks);
-        console.log("📝 markdown result", markdownObj);
-
         const html = marked(markdownObj.parent);
         
         

@@ -1,60 +1,34 @@
 import { getPostBySlug } from "@/lib/notion";
-import { notFound } from "next/navigation";
-import { marked } from "marked";
-import 'highlight.js/styles/github.css';
+import MarkdownWrapper from "@/app/MarkdownWrapper";
+import Link from "next/link";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 
+type Props = {
+    params: { slug: string };
+};
 
-type Params = {
-    params: {
-        slug: string;
+export default async function BlogPostPage( {params }: Props) {
+    const post = await getPostBySlug(params.slug);
+
+    if (!post) {
+        return <div>記事が見つかりませんでした</div>;
     }
+
+    return (
+        <>
+        
+        <article style={{ padding: "2rem" }}>
+        <Breadcrumb items={[
+            { label: "ブログ一覧", href: "/blog/list" },
+            { label: post.title, href: `/blog/${params.slug}` },
+        ]} />
+            <h1>{post.title}</h1>
+            <p>{post.category}</p>
+            <MarkdownWrapper html={post.content} />
+        </article>
+        <Link href="/blog/list" >ブログ一覧に戻る</Link>
+        </>
+    );
 }
 
-export default async function BlogPostPage({ params }: Params) {
-    const post = await getPostBySlug(params.slug)
-
-    if (!post) return notFound()
-
-        const html = marked(post.content?.markdown || post.content?.parent || "");
-
-        return (
-            <main style={{ padding: "2rem" }}>
-                <h1 style={{ fontSize: "2rem", fontWeight: "bold" }}>{post.title}</h1>
-                <p style={{ color: "#666" }}>{post.publishedDate} | {post.category}</p>
-                <div style={{ margin: "2rem 0" }}>
-                    {post.tags.map((tag: string) => (
-                        <span
-                        key={tag}
-                        style={{
-                            display: "inline-block",
-                            backgroundColor: "#f0f0f0",
-                            padding: "0.5rem 1rem",
-                            borderRadius: "0.5rem",
-                            marginRight: "0.5rem",
-                            fontSize: "0.8rem",
-                        }}
-                        >
-                            #{tag}
-                        </span>
-                    ))}
-                </div>
-
-                <hr style={{ margin: "2rem 0" }} />
-
-                {/* <div>
-                    {post.contentBlocks.map((block: any) =>{
-                        if (block.type === "paragraph") {
-                            return (
-                            <p key={block.id} style={{ marginBottom: "1rem" }}>
-                                {block.paragraph.rich_text.map((text: any) => text.plain_text).join("")}
-                            </p>
-                        )   
-                    }
-                    return null
-                    })}
-                </div> */}
-                <div dangerouslySetInnerHTML={{ __html: html }} />
-            </main>
-        )
-}
