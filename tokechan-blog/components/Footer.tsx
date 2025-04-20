@@ -1,15 +1,30 @@
+"use client";
 import Link from "next/link";
+import styled from "styled-components";
 
+
+
+const StyledFooter = styled.footer`
+    padding: 1rem 2rem;
+    background-color:rgb(7, 95, 117);
+    border-bottom: 1px solid #ddd;
+`;
+
+const StyledLink = styled(Link)`
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.5rem;
+    color: #fff;
+`;
 export default function Footer() {
     return (
-        <footer>
+        <StyledFooter>
             <p>
-                <small>© 2025 Tokechan Blog</small>
-                <br />
-                <small>&copy; {new Date().getFullYear()} Tokechan Blog</small>            </p>
+                <small>&copy; {new Date().getFullYear()} Tokechan Blog</small>           
+            </p>
             <nav>
-                <Link href="/">🏠Home</Link> | <Link href="/blog/list">💬Blog</Link>
+                <StyledLink href="/">🏠Home</StyledLink> | <StyledLink href="/blog/list">💬Blog</StyledLink>
             </nav>
-        </footer>
+        </StyledFooter>
     );
 }
