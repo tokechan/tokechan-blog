@@ -17,18 +17,18 @@ export default async function BlogPostPage( {params }: Props) {
     }
 
     return (
-        <>
-        
-        <article style={{ padding: "2rem" }}>
-        <Breadcrumb items={[
-            { label: "ブログ一覧", href: "/blog/list" },
-            { label: post.title, href: `/blog/${params.slug}` },
-        ]} />
-            <h1 className={styles.title}>{post.title}</h1>
-            <p className={styles.date}>{post.publishedDate}</p>
-            <MarkdownWrapper html={post.content} className={styles.markdown} />
-        </article>
-        <Link href="/blog/list" >ブログ一覧に戻る</Link>
+        <> 
+            <article className={styles.article}>
+            <Breadcrumb items={[
+                { label: "ブログ一覧", href: "/blog/list" },
+                { label: post.title, href: `/blog/${params.slug}` },
+            ]} />
+                <h1 className={styles.title}>{post.title}</h1>
+                <p className={styles.date}>{post.publishedDate}</p>
+                <MarkdownWrapper html={post.content} className={styles.markdown} />
+            
+            <Link href="/blog/list" className={styles.backButton}>ブログ一覧に戻る</Link>
+            </article>
         </>
     );
 }
