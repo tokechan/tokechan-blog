@@ -1,0 +1,55 @@
+.container {
+    padding: 2rem;
+}
+
+.title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;        
+}
+.title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.date {
+    font-size: 1rem;
+    color: #18b004;
+    margin-bottom: 1rem;
+}
+
+.content {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.markdown {
+    line-height: 1.8;
+    font-size: 1rem;
+    color: #333;
+  }
+  
+  /* よくある見出しなど */
+  .markdown h1 {
+    font-size: 2rem;
+    margin-top: 2rem;
+  }
+  
+  .markdown h2 {
+    font-size: 1.5rem;
+    margin-top: 1.5rem;
+  }
+  
+  .markdown p {
+    margin-bottom: 1rem;
+  }
+  
+  .markdown code {
+    background: #f5f5f5;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-family: monospace;
+  }
+  

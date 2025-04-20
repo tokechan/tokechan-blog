@@ -2,8 +2,8 @@
 
 import { getPosts } from "@/lib/notion";
 import Link from "next/link";
-import styles from "./page.module.css";
-
+import styles from "./BlogList.module.css";
+import Tag from "@/components/Tag";
 
 
 export default async function BlogListPage() {
@@ -23,7 +23,7 @@ export default async function BlogListPage() {
             </p>
             <div>
               {post.tags.map((tag: string) => (
-                <span key={tag} className={styles.tag}>#{tag}</span>
+                <Tag key={tag} label={tag} />
               ))}
             </div>
           </li>
