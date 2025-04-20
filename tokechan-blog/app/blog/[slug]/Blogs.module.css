@@ -1,5 +1,9 @@
-.container {
+
+
+.article {
     padding: 2rem;
+    background-color: #46013f;
+    margin: 0 auto;
 }
 
 .title {
@@ -28,7 +32,7 @@
 .markdown {
     line-height: 1.8;
     font-size: 1rem;
-    color: #333;
+    color: #e3d9d9;
   }
   
   /* よくある見出しなど */
@@ -52,4 +56,10 @@
     border-radius: 4px;
     font-family: monospace;
   }
+  
+  .backButton {
+    color:rgb(11, 205, 50);
+    text-decoration: none;
+  }
+  
   
