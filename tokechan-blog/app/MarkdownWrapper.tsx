@@ -86,12 +86,16 @@ const StyledMarkdown = styled.div`
 
 type Props = {
     html: string;
+    className?: string;
 };
 
-const MarkdownWrapper = ({ html }: Props) => {
+const MarkdownWrapper = ({ html, className }: Props) => {
     return (
-        <StyledMarkdown dangerouslySetInnerHTML={{ __html: html }} />
-    )
+        <StyledMarkdown 
+            className={className}   
+            dangerouslySetInnerHTML={{ __html: html }} 
+        />
+    );
 }
 
 export default MarkdownWrapper;
