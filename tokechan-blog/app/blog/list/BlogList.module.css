@@ -1,5 +1,7 @@
-.container {
+.article {
     padding: 2rem;
+    background-color: #925a8d;
+    margin: 0 auto;
 }
 
 .heading {
