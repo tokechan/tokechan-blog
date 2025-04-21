@@ -112,3 +112,6 @@ export async function getPostAllPosts() {
         };
     });
 }
+// lib/notion.ts の初期化直後に一時的に追加
+console.log("NOTION_TOKEN:", process.env.NOTION_TOKEN);
+console.log("NOTION_DATABASE_ID:", process.env.NOTION_DATABASE_ID);
