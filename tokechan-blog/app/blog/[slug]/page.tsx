@@ -3,7 +3,15 @@ import MarkdownWrapper from "@/app/MarkdownWrapper";
 import Link from "next/link";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import styles from "./BlogPost.module.css";
+import { getPosts } from "@/lib/notion";
 
+export async function generateStaticParams() {
+    const posts = await getPosts();
+
+    return posts.map((post: any) => ({
+        slug: post.slug,
+    }));
+}
 
 export default async function BlogPostPage(
   props: {
@@ -16,6 +24,7 @@ export default async function BlogPostPage(
   if (!post) {
     return <div>記事が見つかりませんでした</div>;
   }
+
 
   return (
     <article className={styles.article}>
