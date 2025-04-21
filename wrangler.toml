@@ -1,6 +1,6 @@
 [build]
-command = "npm run build"
-publishDirectory = "out"
+command = "cd tokechan-blog && npm run build" 
+publishDirectory = "tokechan-blog/out"
 
 [site]
-bucket = "out" 
+bucket = "tokechan-blog/out"
