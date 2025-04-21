@@ -57,9 +57,9 @@ export async function getPostBySlug(slug: string) {
         const mdBlocks = await n2m.pageToMarkdown(page.id);
         const markdownObj = await n2m.toMarkdownString(mdBlocks);
        
-        const html = markdownObj.parent;
+        const html = await marked(markdownObj.parent);
         
-        console.log(typeof html)
+        console.log("Serverでのhtmlの型",typeof html)
     
         const properties = page.properties
 
