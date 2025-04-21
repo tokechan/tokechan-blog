@@ -10,7 +10,7 @@ export default async function BlogListPage() {
   const posts = await getPosts();
 
   return (
-    <main className={styles.container}>
+    <article  className={styles.article}>
       <h1 className={styles.title}>💬Blog List</h1>
       <ul className={styles.postList}>
         {posts.map((post) => (
@@ -30,6 +30,6 @@ export default async function BlogListPage() {
         ))}
       </ul>
       <h1>こちらはブログ一覧ページです。</h1>
-    </main> 
+    </article> 
   );
 }
