@@ -4,12 +4,11 @@ import Link from "next/link";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import styles from "./BlogPost.module.css";
 
-type Props = {
-    params: { slug: string };
-    searchParams: { [key: string]: string | string[] | undefined };
-};
-
-export default async function BlogPostPage({ params }: Props) {
+export default async function BlogPostPage({ 
+  params,
+}: { 
+  params: { slug: string } 
+}) {
     const post = await getPostBySlug(params.slug);
     
     if (!post) {
