@@ -95,15 +95,15 @@ export async function getPostAllPosts() {
     });
 
     return response.results.map((pages) => {
-        const properties = pages.properties;
+        const properties = (pages as PageObjectResponse).properties;
 
         return {
             id: pages.id,
-            title: properties.Title?.title?.[0]?.plain_text ?? 'No Title',
-            slug: properties.Slug.rich_text?.[0]?.plain_text ?? '',
-            publishedDate: properties.PublishedData?.date?.start ?? '',
-            category: properties.Category?.select?.name ?? '',
-            tags: properties.Tags?.multi_select?.map((tag) => tag.name) ?? [],
+            title: (properties.Title as { title: { plain_text: string }[] })?.title?.[0]?.plain_text ?? 'No Title',
+            slug: (properties.Slug as { rich_text: { plain_text: string }[] })?.rich_text?.[0]?.plain_text ?? '',
+            publishedDate: (properties.PublishedData as { date: { start: string } })?.date?.start ?? '',
+            category: (properties.Category as { select: { name: string } })?.select?.name ?? '',
+            tags: (properties.Tags as { multi_select: { name: string }[] })?.multi_select?.map((tag) => tag.name) ?? [],
         };
     });
 }
