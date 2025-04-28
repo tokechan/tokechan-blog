@@ -60,8 +60,8 @@ const StyledMarkdown = styled.div`
     }   
 
     code {
-        background: f4f4f4;
-        background-color: #f0f0f0;
+        background: f4f4f6;
+        background-color:rgb(1, 1, 1);
         padding: 0.2rem 0.4rem;
         border-radius: 6px;
         font-size: 0.9rem;
@@ -78,7 +78,7 @@ const StyledMarkdown = styled.div`
     }
 
     a {
-        color: #007bff;
+        color:rgb(115, 0, 255);
         text-decoration: none;
     }
 ` 
