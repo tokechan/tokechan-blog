@@ -43,3 +43,22 @@
     justify-content: center;
   }
 }
+
+.container {
+  width: 800px;
+  height: 800px;
+  background-color: aquamarine;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.centerImage {
+  display: block;
+  max-width: 80%;
+  height: auto;
+  margin-left: auto;
+  margin-right: auto;
+  object-fit: cover;
+}
