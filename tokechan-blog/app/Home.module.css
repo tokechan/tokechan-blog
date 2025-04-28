@@ -16,11 +16,13 @@
 .h1 {
     text-align: center;
     justify-content: center;
+    margin-top: 2rem;
 }
 
 .h2 {
     text-align: center;
     justify-content: center;
+    margin-top: 2rem;
 }
 
 .header {
@@ -43,3 +45,34 @@
     justify-content: center;
   }
 }
+
+.container {
+  max-width: 800px;
+  background-color: aquamarine;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2rem auto;
+  padding: 2rem;
+  border-radius: 18px;
+}
+/* スマホ時の表示 */
+@media (max-width: 768px) {
+  .container {
+    width: 98vw;
+    height: auto;
+    min-width: unset;
+    max-width: 100vw;
+    padding: 0.5rem;
+  }
+}
+
+.centerImage {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 10px;
+}
+
