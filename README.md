@@ -67,3 +67,6 @@ export default function Header() {
 - **ページ単位の構造（`page.tsx`）はCSS Modulesで構成**
 - 必要に応じて `Home.module.css`, `Blogs.module.css` などに分割して、可読性と保守性を高めていく
 
+修正する
+
+
