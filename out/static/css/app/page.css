@@ -1,0 +1,49 @@
+/*!***************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[3]!./app/Home.module.css ***!
+  \***************************************************************************************************************************************************************************************************************************************************************/
+
+
+.Home_page__Wi2OG {
+  padding: 2rem;
+  font-family: var(--font-geist-sans);
+}
+
+
+.Home_title__Lguur {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.Home_h1__unVVU {
+    text-align: center;
+    justify-content: center;
+}
+
+.Home_h2__tgj3S {
+    text-align: center;
+    justify-content: center;
+}
+
+.Home_header__wW9db {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 2rem;
+}
+
+/* スマホ時の表示 */
+@media (max-width: 768px) {
+  .Home_header__wW9db {
+    flex-direction: column;
+    gap:0.8rem;
+    padding: 1rem;
+    text-align: center;
+  }
+
+  .Home_nav__JGvAQ {
+    justify-content: center;
+  }
+}
+
