@@ -69,4 +69,4 @@ export default function Header() {
 
 修正する
 
-
+ブログの方向性を考え直す必要あり！！
