@@ -26,12 +26,12 @@ const List = styled.ol`
 const LiItem = styled.li`
     a {
     text-decoration: none;
-    color:rgb(11, 205, 50);
+    color:#C7605E;
     }
 
     &:hover {
         cursor: pointer;
-        color:rgb(145, 168, 150);
+        color:#C7605E;
         text-decoration: underline;
     }
 
@@ -40,13 +40,13 @@ const LiItem = styled.li`
 `;
 
 const Separator = styled.span`
-    color:rgb(11, 205, 50);
+    color:#C7605E;
     margin-left: 0.2rem;
     margin-right: 0.2rem;
 
     &:hover {
 
-        color:rgb(145, 168, 150);
+        color:#C7605E;
     }
 `;
 

@@ -4,16 +4,22 @@ import Link from "next/link";
 import styled from "styled-components";
 
 const StyledHeader = styled.header`
-    padding: 1rem 2rem;
-    background-color:rgb(7, 95, 117);
-    border-bottom: 1px solid #ddd;
+    padding: 1.5rem 2rem;
+    background-color:#489599;
+    border-bottom: 3px solid #D6E6E7;
+    border-radius: 12px;
 `;
 
 const StyledLink = styled(Link)`
     text-decoration: none;
     font-weight: bold;
     font-size: 1.5rem;
-    color: #fff;
+    color: #4A4A4A;
+    transition: text-decoration 0.3s;
+
+    &:hover {
+        text-decoration: underline;
+    }
 `;
 
 export default function Header() {
