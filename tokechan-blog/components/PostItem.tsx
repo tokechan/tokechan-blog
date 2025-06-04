@@ -36,7 +36,7 @@ const PostItemContainer = styled.li`
     padding: 1rem;
     border: 1px solid #ddd;
     border-radius: 7px;
-    background: #fff;
+    background: #F5F2EC;
     transition: box-shadow 0.3s ease;
 
     &:hover {

@@ -60,8 +60,7 @@ const StyledMarkdown = styled.div`
     }   
 
     code {
-        background: f4f4f6;
-        background-color:rgb(1, 1, 1);
+        background-color:#EDE8E2;
         padding: 0.2rem 0.4rem;
         border-radius: 6px;
         font-size: 0.9rem;
@@ -69,8 +68,8 @@ const StyledMarkdown = styled.div`
     }
 
     pre {
-        background: #1e1e1e;
-        color: #fff;
+        background:#EDE8E2;
+        color:#4A4A4A;
         padding: 1rem;
         border-radius: 6px;
         overflow-x: auto;
@@ -78,7 +77,7 @@ const StyledMarkdown = styled.div`
     }
 
     a {
-        color:rgb(115, 0, 255);
+        color: #BF8B67;
         text-decoration: none;
     }
 ` 

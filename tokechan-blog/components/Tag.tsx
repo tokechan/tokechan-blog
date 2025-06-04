@@ -8,13 +8,13 @@ type Props = {
 };
 
 const TagWrapper = styled.span`
-    background-color: #eee;
+    background-color: #C7605E;
     padding: 0.2rem 0.6rem;
     border-radius: 0.8rem;
     margin-right: 0.5rem;
     font-size: 0.8rem;
     display: inline-block;
-    color: #333;
+    color: #4A4A4A;
     font-weight: bold;
 `;
 
