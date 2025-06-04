@@ -2,8 +2,9 @@
 
 .article {
     padding: 2rem;
-    background-color: #925a8d;
+    background-color: #F8F8F8;
     margin: 0 auto;
+    border-radius: 12px;
 }
 
 .title {
@@ -19,7 +20,7 @@
 
 .date {
     font-size: 1rem;
-    color: #18b004;
+    color: #34495E;
     margin-bottom: 1rem;
 }
 
@@ -32,7 +33,7 @@
 .markdown {
     line-height: 1.8;
     font-size: 1rem;
-    color: #e3d9d9;
+    color: #4A4A4A;
   }
   
   /* よくある見出しなど */
@@ -51,15 +52,19 @@
   }
   
   .markdown code {
-    background: #191313;
+    background: #F0F8FF;
     padding: 0.2rem 0.4rem;
     border-radius: 4px;
     font-family: monospace;
   }
   
   .backButton {
-    color:rgb(11, 205, 50);
+    color:#C7605E;
     text-decoration: none;
   }
-  
-  
+
+  .backButton:hover {
+    text-decoration-color:#BF8B67;
+    text-decoration: underline;
+  }
+
