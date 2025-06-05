@@ -15,10 +15,10 @@ export async function generateStaticParams() {
 
 export default async function BlogPostPage(
   props: {
-      params: Promise<{ slug: string }>;
+      params: { slug: string };
     }
 ) {
-  const params = await props.params;
+  const { params } = props;
   const post = await getPostBySlug(params.slug);
 
   if (!post) {

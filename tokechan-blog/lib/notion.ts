@@ -19,7 +19,7 @@ export async function getPosts() {
         },
         sorts: [
             {
-                property: "Publish Date",
+                property: "PublishedDate",
                 direction: "descending",
             },
         ],
@@ -36,7 +36,7 @@ export async function getPosts() {
             slug: properties.Slug?.rich_text?.[0]?.plain_text || '',
             category: properties.Category?.select?.name || null,
             tags: properties.Tags?.multi_select?.map((tag: any) => tag.name) ?? [],
-            publishedDate: properties['Publish Data']?.date?.start || null,
+            publishedDate: properties.PublishedDate?.date?.start || null,
             }
     })
 }
