@@ -149,7 +149,7 @@ Notionデータベースには以下のプロパティが必要です：
 | `Title` | タイトル | 記事タイトル |
 | `Slug` | リッチテキスト | URL用スラッグ |
 | `Published` | チェックボックス | 公開状態 |
-| `Publish Date` | 日付 | 公開日 |
+| `PublishedDate` | 日付 | 公開日 |
 | `Tags` | マルチセレクト | タグ |
 | `Category` | セレクト | カテゴリ |
 | `Status` | セレクト | ステータス |
