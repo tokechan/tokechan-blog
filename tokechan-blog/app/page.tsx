@@ -4,7 +4,7 @@ export default async function Home() {
     return (
         <main className={styles.main}>
           <h1 className={styles.h1}>Tokechan Blog</h1>
-          <h2 className={styles.h2}>こちらはTokeの💬ブログです。</h2>
+          <h2 className={styles.h2}>こちらはTokecの💬ブログです。</h2>
           <div className={styles.container}>
             <div className={styles.card}>
               <img 
