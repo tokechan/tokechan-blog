@@ -19,7 +19,7 @@ export async function getPosts() {
         },
         sorts: [
             {
-                property: "PublishedDate",
+                property: "Publish Date",
                 direction: "descending",
             },
         ],
@@ -94,7 +94,7 @@ export async function getPostAllPosts() {
         database_id: process.env.NOTION_DATABASE_ID!,
         sorts: [
             {
-                property: 'PublishedDate',
+                property: 'Publish Date',
                 direction: 'descending',
             },
         ],
