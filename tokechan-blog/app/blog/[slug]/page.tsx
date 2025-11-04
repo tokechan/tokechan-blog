@@ -13,12 +13,11 @@ export async function generateStaticParams() {
     }));
 }
 
-export default async function BlogPostPage(
-  props: {
-      params: Promise<{ slug: string }>;
-    }
-) {
-  const params = await props.params;
+export default async function BlogPostPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
   const post = await getPostBySlug(params.slug);
 
   if (!post) {
@@ -44,4 +43,3 @@ export default async function BlogPostPage(
   );
 }
   
-

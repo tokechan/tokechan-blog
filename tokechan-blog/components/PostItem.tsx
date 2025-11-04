@@ -32,7 +32,7 @@ export const PostItem =({ post }: { post: Post}) => {
 }
 
 const PostItemContainer = styled.li`
-    margin-nottom: 5rem;
+    margin-bottom: 1.5rem;
     padding: 1rem;
     border: 1px solid #ddd;
     border-radius: 7px;
@@ -54,7 +54,8 @@ const Title = styled.h2`
     margin: 0.5rem 0;
     font-size: 1.2rem;
     font-weight: 600;
-    color: #rgba(216, 148, 13, 0.1)
+    color: rgba(216, 148, 13, 0.85);
+
     &:hover {
         color: #333;
     }

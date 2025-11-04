@@ -24,19 +24,17 @@ const List = styled.ol`
 `;
 
 const LiItem = styled.li`
+    display: flex;
+    align-items: center;
+
     a {
-    text-decoration: none;
-    color:#C7605E;
+        text-decoration: none;
+        color: #C7605E;
     }
 
-    &:hover {
-        cursor: pointer;
-        color:#C7605E;
+    &:hover a {
         text-decoration: underline;
     }
-
-
-  }
 `;
 
 const Separator = styled.span`

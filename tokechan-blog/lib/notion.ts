@@ -19,26 +19,31 @@ export async function getPosts() {
         },
         sorts: [
             {
-                property: "Publish Date",
+                property: "PublishedDate",
                 direction: "descending",
             },
         ],
-    })
-    console.log("🟣 Notionから取得したposts", response.results);
+    });
 
+    return response.results
+        .filter((page): page is PageObjectResponse => "properties" in page)
+        .map((page) => {
+            const properties = page.properties as PageProperties;
+            const publishedDateProperty =
+                (properties as Record<string, any>).PublishedDate ??
+                (properties as Record<string, any>)["Publish Date"] ??
+                null;
 
-    return response.results.map((page: any) => {
-        const properties =page.properties
-        
-        return {
-            id: page.id,
-            title: properties.Title?.title?.[0]?.plain_text || 'No Title',
-            slug: properties.Slug?.rich_text?.[0]?.plain_text || '',
-            category: properties.Category?.select?.name || null,
-            tags: properties.Tags?.multi_select?.map((tag: any) => tag.name) ?? [],
-            publishedDate: properties['Publish Data']?.date?.start || null,
-            }
-    })
+            return {
+                id: page.id,
+                title: properties.Title?.title?.[0]?.plain_text ?? "No Title",
+                slug: properties.Slug?.rich_text?.[0]?.plain_text ?? "",
+                category: properties.Category?.select?.name ?? null,
+                tags: properties.Tags?.multi_select?.map((tag) => tag.name) ?? [],
+                publishedDate: publishedDateProperty?.date?.start ?? null,
+                status: properties.Status?.select?.name ?? "",
+            };
+        });
 }
 
 
@@ -53,9 +58,8 @@ export async function getPostBySlug(slug: string) {
             },
         });
 
-        const page = response.results[0]
-        if (!page) return null
-        // 型チェック
+        const page = response.results[0];
+        if (!page) return null;
         if (!("properties" in page)) {
             throw new Error("Page does not have properties");
         }
@@ -67,9 +71,11 @@ export async function getPostBySlug(slug: string) {
         const mdBlocks = await n2m.pageToMarkdown(page.id);
         const markdownObj = await n2m.toMarkdownString(mdBlocks);
         const html = await marked(markdownObj.parent);
+        const publishedDateProperty =
+            (properties as Record<string, any>).PublishedDate ??
+            (properties as Record<string, any>)["Publish Date"] ??
+            null;
         
-        console.log("Serverでのhtmlの型",typeof html)
-    
 
         return {
             id: page.id,
@@ -77,8 +83,8 @@ export async function getPostBySlug(slug: string) {
             slug: properties.Slug?.rich_text?.[0]?.plain_text ?? '',
             category: properties.Category?.select?.name ?? null,
             tags: properties.Tags?.multi_select?.map((tag: any) => tag.name) ?? [],
-            publishedDate: properties.PublishedDate?.date?.start ?? null,
-            status: properties.Status?.select?.name ?? null,
+            publishedDate: publishedDateProperty?.date?.start ?? null,
+            status: properties.Status?.select?.name ?? "",
             content: html,
         }
 }             
@@ -112,6 +118,3 @@ export async function getPostAllPosts() {
         };
     });
 }
-// lib/notion.ts の初期化直後に一時的に追加
-console.log("NOTION_TOKEN:", process.env.NOTION_TOKEN);
-console.log("NOTION_DATABASE_ID:", process.env.NOTION_DATABASE_ID);
