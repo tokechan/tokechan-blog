@@ -31,3 +31,14 @@
     margin: 0.3rem 0;
     color: #777;
 }
+
+.tag {
+    display: inline-block;
+    margin: 0.2rem 0.5rem 0 0;
+    padding: 0.3rem 0.6rem;
+    border-radius: 9999px;
+    background-color:rgb(154, 198, 22);
+    color: #005a9c;
+    font-size: 0.8rem;
+    font-weight: 500;
+}

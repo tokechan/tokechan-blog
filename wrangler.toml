@@ -7,4 +7,3 @@ name = "tokechan-blog"
 
 [env.preview]
 name = "tokechan-blog-preview"
-

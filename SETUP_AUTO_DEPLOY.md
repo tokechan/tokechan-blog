@@ -2,6 +2,63 @@
 
 Notion でブログ記事の Status を「Published」に変更すると、自動的に Cloudflare Pages にデプロイされる仕組みを設定します。
 
+## ワークフロー遷移図
+
+```mermaid
+flowchart TD
+    A["NotionでStatusをPublishedに変更"] --> B["Notionがデータベースの変更を検知"]
+    B --> C{"集約イベント<br/>1-2分の遅延"}
+    C -->|遅延後| D["NotionがWebhookイベントを送信<br/>data_source.content_updated"]
+    D --> E["Cloudflare Workerがイベントを受信"]
+    E --> F{"イベントタイプをチェック"}
+    F -->|data_source.content_updated| G["GitHub Repository Dispatch APIを呼び出し"]
+    F -->|その他のイベント| H["イベントを無視"]
+    G --> I{"GitHub APIレスポンス"}
+    I -->|成功| J["GitHub Actionsワークフロー起動"]
+    I -->|エラー| K["エラーログを出力"]
+    J --> L["GitHub Actions: Checkout"]
+    L --> M["GitHub Actions: Setup Node.js"]
+    M --> N["GitHub Actions: Install dependencies"]
+    N --> O["GitHub Actions: Build"]
+    O --> P{"ビルド結果"}
+    P -->|成功| Q["GitHub Actions: Deploy to Cloudflare Pages"]
+    P -->|エラー| R["ビルドエラー"]
+    Q --> S{"デプロイ結果"}
+    S -->|成功| T["Cloudflare Pagesにデプロイ完了"]
+    S -->|エラー| U["デプロイエラー"]
+
+    style A fill:#e1f5ff
+    style D fill:#fff4e1
+    style E fill:#fff4e1
+    style G fill:#e8f5e9
+    style J fill:#e8f5e9
+    style T fill:#c8e6c9
+    style K fill:#ffcdd2
+    style R fill:#ffcdd2
+    style U fill:#ffcdd2
+```
+
+## 各コンポーネントの役割
+
+### 1. Notion
+
+- ブログデータベースの Status プロパティを管理
+- データベースの変更を検知して Webhook イベントを送信
+- **重要**: `data_source.content_updated`は集約イベントのため、1-2 分の遅延がある可能性があります
+
+### 2. Cloudflare Worker
+
+- Notion からの Webhook イベントを受信
+- イベントタイプが`data_source.content_updated`の場合のみ処理
+- GitHub Repository Dispatch API を呼び出して GitHub Actions をトリガー
+
+### 3. GitHub Actions
+
+- Worker からのトリガーを受信（`repository_dispatch`イベント）
+- Notion API からブログデータを取得
+- Next.js アプリケーションをビルド
+- Cloudflare Pages にデプロイ
+
 ## 必要な認証情報の取得
 
 ### 1. GitHub Personal Access Token (PAT)
@@ -36,12 +93,23 @@ Notion でブログ記事の Status を「Published」に変更すると、自�
 2. Settings → Secrets and variables → Actions
 3. 「New repository secret」をクリックして以下を追加:
 
-| Name                    | Value                                                |
-| ----------------------- | ---------------------------------------------------- |
-| `NOTION_TOKEN`          | `ntn_i9509198130jzNTadkhjeIyVImS9SaIkjejsZQhpX847UU` |
-| `NOTION_DATABASE_ID`    | `1d9236cad93280ccb990cb26df206c49`                   |
-| `CLOUDFLARE_API_TOKEN`  | Phase 1 で取得した Cloudflare API Token              |
-| `CLOUDFLARE_ACCOUNT_ID` | Phase 1 で取得した Cloudflare Account ID             |
+| Name                    | Value                                           |
+| ----------------------- | ----------------------------------------------- |
+| `NOTION_TOKEN`          | Notion 統合の内部統合トークン（`ntn_`で始まる） |
+| `NOTION_DATABASE_ID`    | Notion データベースの ID（取得方法は下記参照）  |
+| `CLOUDFLARE_API_TOKEN`  | Phase 1 で取得した Cloudflare API Token         |
+| `CLOUDFLARE_ACCOUNT_ID` | Phase 1 で取得した Cloudflare Account ID        |
+
+### Notion データベース ID の取得方法
+
+1. Notion でブログデータベースを開く
+2. ブラウザのアドレスバーから URL をコピー
+3. URL の形式: `https://www.notion.so/{database_id}?v=...`
+   - 例: `https://www.notion.so/1d9236cad93280ccb990cb26df206c49?v=1d9236cad93280e4ae4f000c2b64e4bd`
+   - または: `https://{workspace}.notion.so/{database_id}?v=...`（ワークスペース名が含まれる場合）
+4. `?v=`の前の部分（32 文字の 16 進数）がデータベース ID
+   - 上記の例の場合: `1d9236cad93280ccb990cb26df206c49`
+   - ハイフンが含まれている場合は削除してください
 
 ## Cloudflare Worker のデプロイ
 
@@ -63,8 +131,8 @@ npm run deploy
 4. 「Add subscription」をクリック
 5. 設定:
    - **Endpoint URL**: Worker URL（上記で取得）
-   - **Events**: `data_source.content_updated` にチェック
-   - **API version**: `2022-06-28`
+   - **Events**: `data_source.content_updated` にチェック（データソースカテゴリを選択）
+   - **API version**: `2025-09-03`（`data_source.*`イベントはこのバージョンでのみサポート）
 6. 「Save」をクリック
 
 ## テスト
