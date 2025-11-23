@@ -1,0 +1,10 @@
+name = "tokechan-blog"
+compatibility_date = "2024-11-23"
+pages_build_output_dir = "out"
+
+[env.production]
+name = "tokechan-blog"
+
+[env.preview]
+name = "tokechan-blog-preview"
+
