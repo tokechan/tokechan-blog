@@ -3,7 +3,12 @@
  *
  * Receives webhooks from Notion and triggers GitHub Actions deployment
  * via GitHub Repository Dispatch API.
- * Also supports scheduled polling to check for Status changes.
+ *
+ * Flow:
+ * 1. Notion sends webhook event (data_source.content_updated) when database content changes
+ * 2. Worker receives the event and triggers GitHub Repository Dispatch API
+ * 3. GitHub Actions workflow is triggered and builds/deploys the blog
+ * 4. Build process filters posts by Status = "Published" (handled in lib/notion.ts)
  */
 
 interface Env {
@@ -90,26 +95,21 @@ export default {
 		}
 
 		try {
-			// Debug: Log all request headers
-			const headers: Record<string, string> = {};
-			request.headers.forEach((value, key) => {
-				headers[key] = value;
-			});
-			console.log('Request headers:', JSON.stringify(headers, null, 2));
-			console.log('Request method:', request.method);
-			console.log('Request URL:', request.url);
-
-			// Get request body as text first to inspect it
+			// Get request body as text first
 			const bodyText = await request.text();
-			console.log('Request body (raw):', bodyText);
 
 			// Try to parse as JSON
-			let payload: any = null;
+			let payload: Record<string, unknown> | null = null;
 			try {
-				payload = JSON.parse(bodyText);
-				console.log('Request body (parsed):', JSON.stringify(payload, null, 2));
-			} catch (e) {
+				payload = JSON.parse(bodyText) as Record<string, unknown>;
+			} catch {
 				console.log('Request body is not JSON');
+				return new Response('Invalid JSON', {
+					status: 400,
+					headers: {
+						'Content-Type': 'text/plain',
+					},
+				});
 			}
 
 			// Check if this is a webhook verification request
@@ -135,52 +135,42 @@ export default {
 				});
 			}
 
-			console.log('Received webhook:', payload.type);
-			console.log('Full payload structure:', Object.keys(payload));
-			console.log('Full payload:', JSON.stringify(payload, null, 2));
+			console.log('Received webhook event:', payload.type);
 
-			// Only process data_source.content_updated events
+			// Process data_source.content_updated events
+			// This event is triggered when database content changes, including:
+			// - Page content (title, body) changes
+			// - Property changes (Status, Category, Tags, etc.)
+			// Note: The build process filters posts by Status = "Published" in lib/notion.ts
 			if (payload.type === 'data_source.content_updated') {
 				console.log('Processing data_source.content_updated event');
+				console.log('Event details:', {
+					type: payload.type,
+					timestamp: new Date().toISOString(),
+					hasDataSource: !!payload.data_source,
+					hasEntity: !!payload.entity,
+				});
 
-				// Check if payload contains property change information
-				// Log the entire payload structure to investigate
-				console.log('=== Investigating payload structure for Status property ===');
-				console.log('Payload keys:', Object.keys(payload));
-
-				// Check various possible locations for property change info
-				if (payload.data_source) {
-					console.log('data_source object:', JSON.stringify(payload.data_source, null, 2));
-				}
-				if (payload.properties) {
-					console.log('properties object:', JSON.stringify(payload.properties, null, 2));
-				}
-				if (payload.changes) {
-					console.log('changes object:', JSON.stringify(payload.changes, null, 2));
-				}
-				if (payload.entity) {
-					console.log('entity object:', JSON.stringify(payload.entity, null, 2));
-				}
-
-				// For now, trigger on any content_updated event
-				// We'll add Status-specific filtering once we understand the payload structure
-				console.log('Triggering deployment (Status check not yet implemented)');
+				// Trigger deployment
+				// The GitHub Actions workflow will:
+				// 1. Fetch all posts from Notion API
+				// 2. Filter by Status = "Published" (in lib/notion.ts)
+				// 3. Build and deploy only published posts
 				return await triggerDeployment(env);
 			}
 
-			// Log all other event types for debugging
-			console.log(`Received event type: ${payload.type}`);
-			console.log(`Event payload:`, JSON.stringify(payload, null, 2));
-			console.log(`Ignoring event type: ${payload.type}`);
+			// Log other event types for monitoring
+			console.log(`Received unhandled event type: ${payload.type}`);
 			return new Response('Event ignored', {
 				status: 200,
 				headers: {
 					'Content-Type': 'text/plain',
 				},
 			});
-		} catch (error: any) {
+		} catch (error) {
 			console.error('Error processing webhook:', error);
-			return new Response(`Error: ${error.message}`, {
+			const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+			return new Response(`Error: ${errorMessage}`, {
 				status: 500,
 				headers: {
 					'Content-Type': 'text/plain',
