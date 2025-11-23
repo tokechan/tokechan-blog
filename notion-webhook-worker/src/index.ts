@@ -48,6 +48,33 @@ export default {
 		}
 
 		try {
+			// Check if this is an authentication token verification request
+			const contentType = request.headers.get('content-type') || '';
+			const authToken = request.headers.get('x-notion-token') || 
+			                  request.headers.get('notion-token') ||
+			                  request.headers.get('authorization')?.replace('Bearer ', '');
+
+			// If authentication token is present, verify it
+			if (authToken && env.NOTION_TOKEN) {
+				if (authToken === env.NOTION_TOKEN) {
+					console.log('Authentication token verified');
+					return new Response('OK', {
+						status: 200,
+						headers: {
+							'Content-Type': 'text/plain',
+						},
+					});
+				} else {
+					console.error('Authentication token mismatch');
+					return new Response('Unauthorized', {
+						status: 401,
+						headers: {
+							'Content-Type': 'text/plain',
+						},
+					});
+				}
+			}
+
 			const payload = (await request.json()) as any;
 
 			console.log('Received webhook:', payload.type);
