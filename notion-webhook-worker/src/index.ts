@@ -3,7 +3,49 @@
  *
  * Receives webhooks from Notion and triggers GitHub Actions deployment
  * via GitHub Repository Dispatch API.
+ * Also supports scheduled polling to check for Status changes.
  */
+
+interface Env {
+	GITHUB_TOKEN?: string;
+}
+
+async function triggerDeployment(env: Env): Promise<Response> {
+	const githubResponse = await fetch('https://api.github.com/repos/tokechan/tokechan-blog/dispatches', {
+		method: 'POST',
+		headers: {
+			Authorization: `Bearer ${env.GITHUB_TOKEN}`,
+			Accept: 'application/vnd.github.v3+json',
+			'Content-Type': 'application/json',
+			'User-Agent': 'Notion-Webhook-Worker',
+		},
+		body: JSON.stringify({
+			event_type: 'notion-content-updated',
+			client_payload: {
+				timestamp: new Date().toISOString(),
+			},
+		}),
+	});
+
+	if (!githubResponse.ok) {
+		const errorText = await githubResponse.text();
+		console.error('GitHub API error:', errorText);
+		return new Response(`GitHub API error: ${errorText}`, {
+			status: 500,
+			headers: {
+				'Content-Type': 'text/plain',
+			},
+		});
+	}
+
+	console.log('Successfully triggered GitHub workflow');
+	return new Response('Deployment triggered', {
+		status: 200,
+		headers: {
+			'Content-Type': 'text/plain',
+		},
+	});
+}
 
 export default {
 	async fetch(request: Request, env: Env): Promise<Response> {
@@ -95,48 +137,24 @@ export default {
 
 			console.log('Received webhook:', payload.type);
 			console.log('Full payload structure:', Object.keys(payload));
+			console.log('Full payload:', JSON.stringify(payload, null, 2));
 
 			// Only process data_source.content_updated events
 			if (payload.type === 'data_source.content_updated') {
 				console.log('Processing data_source.content_updated event');
+
+				// Check if Status property was changed to "Published"
+				// The payload structure may vary, so we'll trigger on any content_updated event
+				// and let the build process filter by Status
+				// TODO: Add specific Status check if payload contains property change info
+
 				// Trigger GitHub Repository Dispatch
-				const githubResponse = await fetch('https://api.github.com/repos/tokechan/tokechan-blog/dispatches', {
-					method: 'POST',
-					headers: {
-						Authorization: `Bearer ${env.GITHUB_TOKEN}`,
-						Accept: 'application/vnd.github.v3+json',
-						'Content-Type': 'application/json',
-						'User-Agent': 'Notion-Webhook-Worker',
-					},
-					body: JSON.stringify({
-						event_type: 'notion-content-updated',
-						client_payload: {
-							timestamp: new Date().toISOString(),
-						},
-					}),
-				});
-
-				if (!githubResponse.ok) {
-					const errorText = await githubResponse.text();
-					console.error('GitHub API error:', errorText);
-					return new Response(`GitHub API error: ${errorText}`, {
-						status: 500,
-						headers: {
-							'Content-Type': 'text/plain',
-						},
-					});
-				}
-
-				console.log('Successfully triggered GitHub workflow');
-				return new Response('Deployment triggered', {
-					status: 200,
-					headers: {
-						'Content-Type': 'text/plain',
-					},
-				});
+				return await triggerDeployment(env);
 			}
 
-			// Ignore other event types
+			// Log all other event types for debugging
+			console.log(`Received event type: ${payload.type}`);
+			console.log(`Event payload:`, JSON.stringify(payload, null, 2));
 			console.log(`Ignoring event type: ${payload.type}`);
 			return new Response('Event ignored', {
 				status: 200,
