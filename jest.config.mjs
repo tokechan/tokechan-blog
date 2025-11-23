@@ -10,6 +10,10 @@ const config = {
     "^@/(.*)$": "<rootDir>/$1",
   },
   clearMocks: true,
+  testPathIgnorePatterns: [
+    "/node_modules/",
+    "/notion-webhook-worker/",
+  ],
 };
 
 export default createJestConfig(config);
