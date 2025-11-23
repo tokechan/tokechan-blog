@@ -12,13 +12,37 @@ export default {
 			return new Response(null, {
 				headers: {
 					'Access-Control-Allow-Origin': '*',
-					'Access-Control-Allow-Methods': 'POST, OPTIONS',
+					'Access-Control-Allow-Methods': 'POST, OPTIONS, GET',
 					'Access-Control-Allow-Headers': 'Content-Type',
 				},
 			});
 		}
 
-		// Only accept POST requests
+		// Handle GET requests for webhook verification/authentication
+		if (request.method === 'GET') {
+			const url = new URL(request.url);
+			const challenge = url.searchParams.get('challenge');
+			
+			if (challenge) {
+				// Return the challenge value for webhook verification
+				return new Response(challenge, {
+					status: 200,
+					headers: {
+						'Content-Type': 'text/plain',
+					},
+				});
+			}
+			
+			// Return a simple response for health checks
+			return new Response('OK', {
+				status: 200,
+				headers: {
+					'Content-Type': 'text/plain',
+				},
+			});
+		}
+
+		// Only accept POST requests for webhook events
 		if (request.method !== 'POST') {
 			return new Response('Method not allowed', { status: 405 });
 		}
