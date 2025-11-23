@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🎨 Tokechan Blog
 
 Next.js 15とNotion APIを使用したモダンなブログアプリケーション
@@ -17,6 +18,27 @@ Next.js 15とNotion APIを使用したモダンなブログアプリケーショ
 - **☁️ Cloudflare Pages**: 高速なグローバル配信
 
 ## 🏗️ 技術スタック
+=======
+# Tokechan Blog
+
+Next.js 15とNotion APIを使用したモダンなブログアプリケーション
+
+## プロジェクト概要
+
+このプロジェクトは、NotionをCMS（コンテンツ管理システム）として使用し、Next.js 15で構築された静的サイトジェネレーション（SSG）ブログ
+
+### 主な特徴
+
+- **Notion CMS**: Notionをコンテンツ管理システムとして使用
+- **Next.js 15**: 最新のApp Routerを使用したモダンなReactフレームワーク
+- **静的サイト生成**: 高速で安全な静的サイト
+- **Styled Components**: CSS-in-JSによるスタイリング
+- **レスポンシブデザイン**: モバイルファーストなUI
+- **TypeScript**: 型安全な開発環境
+- **Cloudflare Pages**: 高速なグローバル配信
+
+## 技術スタック
+>>>>>>> origin/main
 
 ### **フロントエンド**
 - **Next.js 15.3.1** - React フレームワーク
@@ -37,6 +59,7 @@ Next.js 15とNotion APIを使用したモダンなブログアプリケーショ
 - **ESLint 9** - コード品質管理
 - **Cloudflare Wrangler** - デプロイツール
 
+<<<<<<< HEAD
 ## 📁 プロジェクト構造
 
 ```
@@ -85,6 +108,45 @@ tokechan-blog/
 このプロジェクトでは、以下のスタイリング手法を使い分けています：
 
 ### **📁 CSS Modules（`*.module.css`）**
+=======
+## プロジェクト構造
+
+```
+.
+├── app/                    # Next.js App Router
+│   ├── layout.tsx            # ルートレイアウト
+│   ├── page.tsx              # ホームページ
+│   ├── globals.css           # グローバルスタイル
+│   ├── Home.module.css       # ホームページスタイル
+│   └── blog/              # ブログルート
+│       ├── page.tsx          # ブログトップ
+│       ├── [slug]/        # 動的ルート（記事詳細）
+│       └── list/          # 記事一覧
+├── components/             # 再利用可能なコンポーネント
+│   ├── Header.tsx            # ヘッダーコンポーネント
+│   ├── Footer.tsx            # フッターコンポーネント
+│   ├── PostItem.tsx          # 記事アイテム
+│   ├── Tag.tsx               # タグコンポーネント
+│   └── Breadcrumb.tsx        # パンくずナビ
+├── lib/                   # ユーティリティ
+│   └── notion.ts             # Notion API連携
+├── types/                 # TypeScript型定義
+│   └── notion.ts             # Notion関連の型
+├── public/                # 静的ファイル
+│   └── images/            # 画像ファイル
+├── out/                     # `npm run build` で生成される静的成果物
+├── next.config.ts            # Next.js設定
+├── package.json              # 依存関係管理
+├── tsconfig.json             # TypeScript設定
+└── wrangler.toml             # Cloudflare設定
+```
+
+## スタイリング戦略
+
+このプロジェクトでは、以下のスタイリング手法を試している：
+
+### **CSS Modules（`*.module.css`）**
+>>>>>>> origin/main
 - **使用場所**: `page.tsx`, `layout.tsx`（Server Component）
 - **理由**: Server Componentでは`styled-components`が使用できないため
 
@@ -93,7 +155,11 @@ import styles from "./Home.module.css";
 <h1 className={styles.title}>ブログ一覧</h1>
 ```
 
+<<<<<<< HEAD
 ### **💅 Styled Components**
+=======
+### **Styled Components**
+>>>>>>> origin/main
 - **使用場所**: Client Component（`Header.tsx`, `Tag.tsx`など）
 - **理由**: コンポーネント内スタイルの閉じ込めと動的スタイル
 
@@ -104,11 +170,19 @@ const Title = styled.h1`
 `;
 ```
 
+<<<<<<< HEAD
 ## 🚀 セットアップ・開発手順
 
 ### **1. 環境変数の設定**
 
 `.env.local` ファイルを作成して、Notion APIの設定を行います：
+=======
+## セットアップ・開発手順
+
+### **1. 環境変数の設定**
+
+`.env.local` ファイルを作成して、Notion APIの設定を行う：
+>>>>>>> origin/main
 
 ```bash
 # Notion API設定
@@ -119,7 +193,10 @@ NOTION_DATABASE_ID=your_notion_database_id
 ### **2. 依存関係のインストール**
 
 ```bash
+<<<<<<< HEAD
 cd tokechan-blog
+=======
+>>>>>>> origin/main
 npm install
 ```
 
@@ -141,7 +218,11 @@ npm run build
 wrangler pages deploy
 ```
 
+<<<<<<< HEAD
 ## 📦 利用可能なスクリプト
+=======
+## 利用可能なスクリプト
+>>>>>>> origin/main
 
 | コマンド | 説明 |
 |---------|------|
@@ -150,11 +231,19 @@ wrangler pages deploy
 | `npm run start` | 本番サーバー起動 |
 | `npm run lint` | ESLintによるコード検証 |
 
+<<<<<<< HEAD
 ## 🔧 Notion設定
 
 ### **データベース構造**
 
 Notionデータベースには以下のプロパティが必要です：
+=======
+## Notion設定
+
+### **データベース構造**
+
+Notionデータベースには以下のプロパティが必要：
+>>>>>>> origin/main
 
 | プロパティ名 | 型 | 説明 |
 |-------------|---|------|
@@ -166,6 +255,7 @@ Notionデータベースには以下のプロパティが必要です：
 | `Category` | セレクト | カテゴリ |
 | `Status` | セレクト | ステータス |
 
+<<<<<<< HEAD
 ## 🌐 デプロイ・本番環境
 
 ### **Cloudflare Pages**
@@ -220,3 +310,13 @@ MIT License
 
 
 
+=======
+## デプロイ・本番環境
+
+### **Cloudflare Pages**
+- 静的サイトホスティング
+- `wrangler.toml` で `npm run build` を実行し、生成された `out/` を配信
+
+---
+
+>>>>>>> origin/main

@@ -1,6 +1,19 @@
+<<<<<<< HEAD
 [build]
 command = "cd tokechan-blog && npm run build" 
 publishDirectory = "tokechan-blog/out"
 
 [site]
 bucket = "tokechan-blog/out"
+=======
+name = "tokechan-blog"
+compatibility_date = "2024-11-23"
+pages_build_output_dir = "out"
+
+[env.production]
+name = "tokechan-blog"
+
+[env.preview]
+name = "tokechan-blog-preview"
+
+>>>>>>> origin/main
