@@ -94,9 +94,11 @@ export default {
 			}
 
 			console.log('Received webhook:', payload.type);
+			console.log('Full payload structure:', Object.keys(payload));
 
 			// Only process data_source.content_updated events
 			if (payload.type === 'data_source.content_updated') {
+				console.log('Processing data_source.content_updated event');
 				// Trigger GitHub Repository Dispatch
 				const githubResponse = await fetch('https://api.github.com/repos/tokechan/tokechan-blog/dispatches', {
 					method: 'POST',
@@ -135,6 +137,7 @@ export default {
 			}
 
 			// Ignore other event types
+			console.log(`Ignoring event type: ${payload.type}`);
 			return new Response('Event ignored', {
 				status: 200,
 				headers: {
