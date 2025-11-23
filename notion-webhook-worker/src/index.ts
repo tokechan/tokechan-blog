@@ -143,12 +143,28 @@ export default {
 			if (payload.type === 'data_source.content_updated') {
 				console.log('Processing data_source.content_updated event');
 
-				// Check if Status property was changed to "Published"
-				// The payload structure may vary, so we'll trigger on any content_updated event
-				// and let the build process filter by Status
-				// TODO: Add specific Status check if payload contains property change info
+				// Check if payload contains property change information
+				// Log the entire payload structure to investigate
+				console.log('=== Investigating payload structure for Status property ===');
+				console.log('Payload keys:', Object.keys(payload));
 
-				// Trigger GitHub Repository Dispatch
+				// Check various possible locations for property change info
+				if (payload.data_source) {
+					console.log('data_source object:', JSON.stringify(payload.data_source, null, 2));
+				}
+				if (payload.properties) {
+					console.log('properties object:', JSON.stringify(payload.properties, null, 2));
+				}
+				if (payload.changes) {
+					console.log('changes object:', JSON.stringify(payload.changes, null, 2));
+				}
+				if (payload.entity) {
+					console.log('entity object:', JSON.stringify(payload.entity, null, 2));
+				}
+
+				// For now, trigger on any content_updated event
+				// We'll add Status-specific filtering once we understand the payload structure
+				console.log('Triggering deployment (Status check not yet implemented)');
 				return await triggerDeployment(env);
 			}
 
