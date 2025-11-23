@@ -8,10 +8,6 @@ const StyledFooter = styled.footer`
     background-color:#489599;
     border-bottom: 3px solid #D6E6E7;
     border-radius: 12px;
-<<<<<<< HEAD:tokechan-blog/components/Footer.tsx
-    }
-=======
->>>>>>> origin/main:components/Footer.tsx
 `;
 
 const StyledLink = styled(Link)`

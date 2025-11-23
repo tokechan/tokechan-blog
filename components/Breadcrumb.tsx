@@ -28,21 +28,11 @@ const LiItem = styled.li`
     align-items: center;
 
     a {
-<<<<<<< HEAD:tokechan-blog/components/Breadcrumb.tsx
-    text-decoration: none;
-    color:#C7605E;
-    }
-
-    &:hover {
-        cursor: pointer;
-        color:#C7605E;
-=======
         text-decoration: none;
         color: #C7605E;
     }
 
     &:hover a {
->>>>>>> origin/main:components/Breadcrumb.tsx
         text-decoration: underline;
     }
 `;

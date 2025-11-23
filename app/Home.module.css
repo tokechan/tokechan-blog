@@ -36,11 +36,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 1.2rem 2rem;
-<<<<<<< HEAD:tokechan-blog/app/Home.module.css
-  border-radius: 12;
-=======
   border-radius: 12px;
->>>>>>> origin/main:app/Home.module.css
 }
 
 /* スマホ時の表示 */
@@ -67,8 +63,6 @@
   padding: 1rem;
   border-radius: 18px;
 }
-<<<<<<< HEAD:tokechan-blog/app/Home.module.css
-=======
 
 .main {
   display: flex;
@@ -76,7 +70,7 @@
   align-items: center;
   padding: 2rem;
 }
->>>>>>> origin/main:app/Home.module.css
+
 /* スマホ時の表示 */
 @media (max-width: 768px) {
   .container {
@@ -96,7 +90,3 @@
   margin-right: auto;
   border-radius: 10px;
 }
-<<<<<<< HEAD:tokechan-blog/app/Home.module.css
-
-=======
->>>>>>> origin/main:app/Home.module.css
