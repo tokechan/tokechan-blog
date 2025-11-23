@@ -10,12 +10,6 @@ const n2m = new NotionToMarkdown({ notionClient: notion });
 export async function getPosts() {
   const response = await notion.databases.query({
     database_id: process.env.NOTION_DATABASE_ID!,
-    filter: {
-      property: "Status",
-      select: {
-        equals: "Published",
-      },
-    },
     sorts: [
       {
         property: "Publish Date",
@@ -42,7 +36,8 @@ export async function getPosts() {
         publishedDate: publishedDateProperty?.date?.start ?? null,
         status: properties.Status?.select?.name ?? "",
       };
-    });
+    })
+    .filter((post) => post.status === "Published");
 }
 
 export async function getPostBySlug(slug: string) {
