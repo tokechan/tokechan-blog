@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+node_modules/
 /.pnp
 .pnp.*
 .yarn/*
@@ -46,4 +47,11 @@ next-env.d.ts
 
 # wrangler
 .wrangler/
+**/.wrangler/
 .dev.vars
+**/.dev.vars
+
+# notion-webhook-worker specific
+notion-webhook-worker/.wrangler/
+notion-webhook-worker/.dev.vars
+notion-webhook-worker/node_modules/
