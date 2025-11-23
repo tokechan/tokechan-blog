@@ -18,7 +18,7 @@ export async function getPosts() {
     ],
   });
 
-  return response.results
+  const posts = response.results
     .filter((page): page is PageObjectResponse => "properties" in page)
     .map((page) => {
       const properties = page.properties as PageProperties;
@@ -27,6 +27,15 @@ export async function getPosts() {
         (properties as Record<string, any>)["Publish Date"] ??
         null;
 
+      // Statusプロパティの取得を試行（複数の型に対応）
+      const statusProperty = properties.Status as any;
+      let status = "";
+      if (statusProperty?.select?.name) {
+        status = statusProperty.select.name;
+      } else if (statusProperty?.status?.name) {
+        status = statusProperty.status.name;
+      }
+
       return {
         id: page.id,
         title: properties.Title?.title?.[0]?.plain_text ?? "No Title",
@@ -34,10 +43,28 @@ export async function getPosts() {
         category: properties.Category?.select?.name ?? null,
         tags: properties.Tags?.multi_select?.map((tag) => tag.name) ?? [],
         publishedDate: publishedDateProperty?.date?.start ?? null,
-        status: properties.Status?.select?.name ?? "",
+        status: status,
       };
-    })
-    .filter((post) => post.status === "Published");
+    });
+
+  // デバッグ: Statusプロパティの値を確認
+  if (process.env.NODE_ENV === "development") {
+    console.log(
+      "All posts status:",
+      posts.map((p) => ({ title: p.title, status: p.status }))
+    );
+  }
+
+  const publishedPosts = posts.filter((post) => post.status === "Published");
+
+  // デバッグ: フィルタリング後の件数を確認
+  if (process.env.NODE_ENV === "development") {
+    console.log(
+      `Total posts: ${posts.length}, Published posts: ${publishedPosts.length}`
+    );
+  }
+
+  return publishedPosts;
 }
 
 export async function getPostBySlug(slug: string) {
