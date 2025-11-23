@@ -93,12 +93,23 @@ flowchart TD
 2. Settings → Secrets and variables → Actions
 3. 「New repository secret」をクリックして以下を追加:
 
-| Name                    | Value                                                |
-| ----------------------- | ---------------------------------------------------- |
-| `NOTION_TOKEN`          | `ntn_i9509198130jzNTadkhjeIyVImS9SaIkjejsZQhpX847UU` |
-| `NOTION_DATABASE_ID`    | `1d9236cad93280ccb990cb26df206c49`                   |
-| `CLOUDFLARE_API_TOKEN`  | Phase 1 で取得した Cloudflare API Token              |
-| `CLOUDFLARE_ACCOUNT_ID` | Phase 1 で取得した Cloudflare Account ID             |
+| Name                    | Value                                           |
+| ----------------------- | ----------------------------------------------- |
+| `NOTION_TOKEN`          | Notion 統合の内部統合トークン（`ntn_`で始まる） |
+| `NOTION_DATABASE_ID`    | Notion データベースの ID（取得方法は下記参照）  |
+| `CLOUDFLARE_API_TOKEN`  | Phase 1 で取得した Cloudflare API Token         |
+| `CLOUDFLARE_ACCOUNT_ID` | Phase 1 で取得した Cloudflare Account ID        |
+
+### Notion データベース ID の取得方法
+
+1. Notion でブログデータベースを開く
+2. ブラウザのアドレスバーから URL をコピー
+3. URL の形式: `https://www.notion.so/{database_id}?v=...`
+   - 例: `https://www.notion.so/1d9236cad93280ccb990cb26df206c49?v=1d9236cad93280e4ae4f000c2b64e4bd`
+   - または: `https://{workspace}.notion.so/{database_id}?v=...`（ワークスペース名が含まれる場合）
+4. `?v=`の前の部分（32 文字の 16 進数）がデータベース ID
+   - 上記の例の場合: `1d9236cad93280ccb990cb26df206c49`
+   - ハイフンが含まれている場合は削除してください
 
 ## Cloudflare Worker のデプロイ
 

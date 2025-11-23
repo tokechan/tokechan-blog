@@ -146,7 +146,7 @@ export default {
 				console.log('Processing data_source.content_updated event');
 				console.log('Event details:', {
 					type: payload.type,
-					timestamp: new Date().toISOString(),
+							timestamp: new Date().toISOString(),
 					hasDataSource: !!payload.data_source,
 					hasEntity: !!payload.entity,
 				});
