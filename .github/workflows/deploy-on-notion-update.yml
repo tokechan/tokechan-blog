@@ -21,6 +21,22 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Verify environment variables
+        run: |
+          if [ -z "$NOTION_TOKEN" ]; then
+            echo "ERROR: NOTION_TOKEN is not set"
+            exit 1
+          fi
+          if [ -z "$NOTION_DATABASE_ID" ]; then
+            echo "ERROR: NOTION_DATABASE_ID is not set"
+            exit 1
+          fi
+          echo "NOTION_TOKEN is set (length: ${#NOTION_TOKEN})"
+          echo "NOTION_DATABASE_ID is set: $NOTION_DATABASE_ID"
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+
       - name: Build
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
