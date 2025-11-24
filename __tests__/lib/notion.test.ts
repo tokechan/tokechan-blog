@@ -64,6 +64,17 @@ describe("lib/notion", () => {
             "Publish Date": { date: { start: "2025-10-10" } },
           },
         },
+        {
+          id: "page-2",
+          properties: {
+            Title: { title: [{ plain_text: "Draft Post" }] },
+            Slug: { rich_text: [{ plain_text: "draft-post" }] },
+            Category: { select: { name: "Tech" } },
+            Tags: { multi_select: [] },
+            Status: { select: { name: "Draft" } },
+            "Publish Date": { date: { start: "2025-10-11" } },
+          },
+        },
         { id: "page-without-properties" },
       ],
     };
@@ -75,10 +86,16 @@ describe("lib/notion", () => {
     expect(mockDatabasesQuery).toHaveBeenCalledWith(
       expect.objectContaining({
         database_id: "test-database",
-        filter: expect.any(Object),
+        sorts: expect.arrayContaining([
+          expect.objectContaining({
+            property: "Publish Date",
+            direction: "descending",
+          }),
+        ]),
       })
     );
 
+    // Statusが"Published"のもののみが返されることを確認
     expect(posts).toEqual([
       {
         id: "page-1",
@@ -106,7 +123,9 @@ describe("lib/notion", () => {
     };
 
     mockDatabasesQuery.mockResolvedValueOnce({ results: [notionPage] });
-    mockPageToMarkdown.mockResolvedValueOnce([{ type: "paragraph", parent: "# Heading" }]);
+    mockPageToMarkdown.mockResolvedValueOnce([
+      { type: "paragraph", parent: "# Heading" },
+    ]);
     mockToMarkdownString.mockResolvedValueOnce({ parent: "# Heading" });
     mockMarked.mockResolvedValueOnce("<h1>Heading</h1>");
 
