@@ -6,11 +6,23 @@ import styles from "./BlogPost.module.css";
 import { getPosts } from "@/lib/notion";
 
 export async function generateStaticParams() {
-    const posts = await getPosts();
+    try {
+        const posts = await getPosts();
 
-    return posts.map((post: any) => ({
-        slug: post.slug,
-    }));
+        if (!posts || posts.length === 0) {
+            console.warn("No published posts found. Returning empty array.");
+            return [];
+        }
+
+        return posts
+            .filter((post) => post.slug) // slugが存在するもののみ
+            .map((post) => ({
+                slug: post.slug,
+            }));
+    } catch (error) {
+        console.error("Error in generateStaticParams:", error);
+        return [];
+    }
 }
 
 export default async function BlogPostPage({
