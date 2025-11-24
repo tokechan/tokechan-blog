@@ -1,6 +1,7 @@
 # 作業引き継ぎドキュメント
 
 作成日: 2025-11-23
+最終更新: 2025-11-24
 
 ## 現在の状況
 
@@ -32,14 +33,27 @@
 5. **セキュリティ対策**
    - `SETUP_AUTO_DEPLOY.md`から機密情報（トークン、データベースID）を削除
 
-### ⚠️ 現在の問題
+### ✅ 解決した問題
 
 1. **ビルドエラー: Notion API認証エラー**
-   ```
-   Error [APIResponseError]: API token is invalid.
-   ```
-   - GitHub Secretsの`NOTION_TOKEN`が無効か、正しく設定されていない可能性
-   - ビルド時にNotion APIへのアクセスが失敗している
+   - ✅ ローカルの`.env.local`を更新
+   - ✅ GitHub Secretsの`NOTION_TOKEN`を更新
+   - ✅ テストを修正（`filter`から`sorts`への変更に対応）
+
+2. **テストエラーの修正**
+   - ✅ `__tests__/lib/notion.test.ts`を修正
+   - ✅ `getPosts()`の実装変更（`filter`削除、取得後にJavaScriptでフィルタリング）に対応
+
+3. **CLIでのデプロイ成功**
+   - ✅ `wrangler pages deploy out --project-name=tokechan-blog --branch=main`でデプロイ成功
+   - ✅ デプロイ先: `https://d8a30a76.tokechan-blog.pages.dev`
+
+### ⚠️ 残っている問題
+
+1. **Git連携の自動デプロイで環境変数が設定されない**
+   - Cloudflare Pagesの自動ビルド（Git連携）で`Build environment variables: (none found)`と表示される
+   - Production環境の「Variables and Secrets」で`NOTION_TOKEN`を設定しても反映されない
+   - **調査が必要**: 帰宅後に調査予定
 
 2. **Webhookの動作確認が未完了**
    - NotionでStatusを変更してもWebhookが発火していない
@@ -48,21 +62,24 @@
 
 ## 次のステップ
 
-### 1. ビルドエラーの解決（最優先）
+### 1. Git連携の自動デプロイの環境変数設定（最優先）
 
-#### 確認事項
-- [ ] GitHub Secretsの`NOTION_TOKEN`が正しく設定されているか確認
-- [ ] Notionでトークンを再発行
-- [ ] GitHub Secretsに新しいトークンを設定
-- [ ] 再度ビルドを実行してエラーが解消されるか確認
+#### 問題
+- Cloudflare Pagesの自動ビルド（Git連携）で環境変数が設定されない
+- `Build environment variables: (none found)`と表示される
+- Production環境の「Variables and Secrets」で設定しても反映されない
+
+#### 調査事項
+- [ ] Cloudflare PagesのSettingsタブで、Environmentが「Production」になっているか確認
+- [ ] Production環境の「Variables and Secrets」で`NOTION_TOKEN`と`NOTION_DATABASE_ID`が正しく設定されているか確認
+- [ ] Preview環境とProduction環境で環境変数の設定が分かれているか確認
+- [ ] Cloudflare Pagesのドキュメントで環境変数の設定方法を確認
+- [ ] 必要に応じて、GitHub Actionsのワークフローでビルドとデプロイを実行する方法を検討
 
 #### 確認方法
-```bash
-# GitHub Actionsのログで以下を確認
-# "Verify environment variables"ステップで以下が表示されるか：
-# - NOTION_TOKEN is set (length: XX)
-# - NOTION_DATABASE_ID is set: XXXXXX
-```
+- Cloudflare Pagesのダッシュボード → `tokechan-blog` → Settings
+- Environmentを「Production」に設定
+- 「Variables and Secrets」セクションで環境変数を確認
 
 ### 2. Webhookの動作確認
 
@@ -163,4 +180,25 @@ npx wrangler tail
 
 - Statusプロパティの変更が`data_source.content_updated`イベントをトリガーするかは未確認
 - もしWebhookが動作しない場合、ポーリング方式への切り替えも検討可能（ただし、リアルタイム性は低下）
+
+## 今日の成果（2025-11-24）
+
+### 完了した作業
+1. ✅ ローカルの`.env.local`を更新してビルドエラーを解決
+2. ✅ GitHub Secretsの`NOTION_TOKEN`を更新
+3. ✅ テストを修正（`filter`から`sorts`への変更に対応）
+4. ✅ CLIでのデプロイ成功（`wrangler pages deploy`）
+5. ✅ Production環境とPreview環境の違いを理解
+
+### 重要な発見
+- **Git連携（自動デプロイ）**: `main`ブランチにpush → Production環境、その他のブランチ → Preview環境
+- **CLIデプロイ**: `wrangler pages deploy`でデプロイ可能（環境変数は手動設定が必要）
+- **環境変数の設定場所**: 
+  - GitHub Secrets（GitHub Actions用）
+  - Cloudflare PagesのVariables and Secrets（自動ビルド用）
+  - ローカルの`.env.local`（ローカル開発用）
+
+### 次の作業（帰宅後）
+- Git連携の自動デプロイで環境変数が設定されない問題の調査
+- Cloudflare PagesのProduction環境の環境変数設定方法の確認
 
