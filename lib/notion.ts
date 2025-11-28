@@ -95,6 +95,15 @@ export async function getPostBySlug(slug: string) {
     (properties as Record<string, any>)["Publish Date"] ??
     null;
 
+  // Statusプロパティの取得を試行（複数の型に対応）
+  const statusProperty = properties.Status as any;
+  let status = "";
+  if (statusProperty?.select?.name) {
+    status = statusProperty.select.name;
+  } else if (statusProperty?.status?.name) {
+    status = statusProperty.status.name;
+  }
+
   return {
     id: page.id,
     title: properties.Title?.title?.[0]?.plain_text ?? "No Title",
@@ -102,7 +111,7 @@ export async function getPostBySlug(slug: string) {
     category: properties.Category?.select?.name ?? null,
     tags: properties.Tags?.multi_select?.map((tag: any) => tag.name) ?? [],
     publishedDate: publishedDateProperty?.date?.start ?? null,
-    status: properties.Status?.select?.name ?? "",
+    status: status,
     content: html,
   };
 }
