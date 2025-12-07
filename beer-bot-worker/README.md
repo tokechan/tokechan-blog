@@ -1,11 +1,11 @@
 # LINE Beer Bot
 
-LINE Messaging APIを使用したビール推薦Botです。ユーザーの気分に応じて、適切なビールと商品URLを推薦します。
+LINE Messaging API を使用したビール推薦 Bot です。ユーザーの気分に応じて、適切なビールと商品 URL を推薦します。
 
 ## 機能
 
 - ユーザーの気分（「リラックスしたい」「疲れた」「スッキリしたい」など）に応じたビール推薦
-- ビールの名前、説明、商品URLを提供
+- ビールの名前、説明、商品 URL を提供
 
 ## セットアップ
 
@@ -17,7 +17,7 @@ npm install
 
 ### 2. 環境変数の設定
 
-`.env.example`をコピーして`.env`ファイルを作成し、LINE Messaging APIの認証情報を設定してください。
+`.env.example`をコピーして`.env`ファイルを作成し、LINE Messaging API の認証情報を設定してください。
 
 ```bash
 cp .env.example .env
@@ -25,18 +25,18 @@ cp .env.example .env
 
 `.env`ファイルに以下の情報を設定します：
 
-- `LINE_CHANNEL_ACCESS_TOKEN`: LINE Developers Consoleで取得したChannel Access Token
-- `LINE_CHANNEL_SECRET`: LINE Developers Consoleで取得したChannel Secret
+- `LINE_CHANNEL_ACCESS_TOKEN`: LINE Developers Console で取得した Channel Access Token
+- `LINE_CHANNEL_SECRET`: LINE Developers Console で取得した Channel Secret
 - `PORT`: サーバーのポート番号（オプション、デフォルト: 3000）
 
-### 3. LINE Developers Consoleでの設定
+### 3. LINE Developers Console での設定
 
 1. [LINE Developers Console](https://developers.line.biz/console/)にアクセス
 2. プロバイダーを作成（初回のみ）
-3. チャネルを作成し、Messaging APIを有効化
-4. Channel Access TokenとChannel Secretを取得
-5. Webhook URLを設定（例: `https://your-domain.com/webhook`）
-6. Webhookの利用を有効化
+3. チャネルを作成し、Messaging API を有効化
+4. Channel Access Token と Channel Secret を取得
+5. Webhook URL を設定（例: `https://your-domain.com/webhook`）
+6. Webhook の利用を有効化
 
 ## 開発
 
@@ -62,11 +62,11 @@ npm start
 
 ## 使用方法
 
-1. LINEアプリでBotを友だち追加
-2. Botにメッセージを送信（例: 「こんにちは」）
-3. Botが「今の気分は？」と質問
+1. LINE アプリで Bot を友だち追加
+2. Bot にメッセージを送信（例: 「こんにちは」）
+3. Bot が「今の気分は？」と質問
 4. 気分を送信（例: 「リラックスしたい」「疲れた」「スッキリしたい」）
-5. Botがおすすめのビールを返信
+5. Bot がおすすめのビールを返信
 
 ## プロジェクト構成
 
@@ -92,21 +92,21 @@ beer-bot-worker/
 
 ## デプロイ
 
-### Cloudflare Workersへのデプロイ
+### Cloudflare Workers へのデプロイ
 
-**注意**: 現在の実装はExpressサーバーです。Cloudflare Workersで直接動作させるには、`@cloudflare/workers-express`などのアダプターが必要です。
+**注意**: 現在の実装は Express サーバーです。Cloudflare Workers で直接動作させるには、`@cloudflare/workers-express`などのアダプターが必要です。
 
-通常のNode.jsサーバーとしてデプロイする場合は、以下のプラットフォームを推奨します：
+通常の Node.js サーバーとしてデプロイする場合は、以下のプラットフォームを推奨します：
 
 - Railway
 - Render
 - Heroku
 
-Cloudflare Workersで動作させる場合は、Expressの代わりにHonoなどのフレームワークを使用することを検討してください。
+Cloudflare Workers で動作させる場合は、Express の代わりに Hono などのフレームワークを使用することを検討してください。
 
 ### その他のプラットフォーム
 
-Expressサーバーとして動作するため、以下のようなプラットフォームにデプロイ可能です：
+Express サーバーとして動作するため、以下のようなプラットフォームにデプロイ可能です：
 
 - Heroku
 - Railway
@@ -117,4 +117,3 @@ Expressサーバーとして動作するため、以下のようなプラット�
 ## ライセンス
 
 MIT
-
