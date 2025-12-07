@@ -32,7 +32,7 @@ jobs:
             exit 1
           fi
           echo "NOTION_TOKEN is set (length: ${#NOTION_TOKEN})"
-          echo "NOTION_DATABASE_ID is set: $NOTION_DATABASE_ID"
+          echo "NOTION_DATABASE_ID is set (length: ${#NOTION_DATABASE_ID})"
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
